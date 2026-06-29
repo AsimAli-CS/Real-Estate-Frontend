@@ -21,13 +21,19 @@ export default function Header() {
         </form>
         <ul className="flex gap-3 text-sm sm:text-base">
           <Link to="/">
-            <li className="hover:text-blue-400 cursor-pointer">Home</li>
+            <li className="hover:text-blue-400 cursor-pointer text-blue-400">
+              Home
+            </li>
           </Link>
           <Link to="/about">
-            <li className="hover:text-blue-400 cursor-pointer">About</li>
+            <li className="hover:text-blue-400 cursor-pointer text-blue-400">
+              About
+            </li>
           </Link>
           <Link to="/signin">
-            <li className="hover:text-blue-400 cursor-pointer">Sign In</li>
+            <li className="hover:text-blue-400 cursor-pointer text-blue-400">
+              Sign In
+            </li>
           </Link>
         </ul>
       </div>

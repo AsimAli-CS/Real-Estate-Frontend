@@ -77,7 +77,7 @@ export default function SignUp() {
       </form>
       <div className="flex gap-1">
         <p>Have an account?</p>
-        <Link to={'/login'} className="text-blue-500 hover:underline">
+        <Link to={'/signin'} className="text-blue-500 hover:underline">
           Login
         </Link>
       </div>
