@@ -25,7 +25,7 @@ export default function SignIn() {
     e.preventDefault()
     try {
       dispatch(signInStart())
-      const res = await fetch('http://localhost:3000/api/v1/user/signIn', {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/user/signIn`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
