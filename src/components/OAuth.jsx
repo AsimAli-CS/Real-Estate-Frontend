@@ -23,13 +23,13 @@ export default function OAuth() {
           body: JSON.stringify({
             name: result.user.displayName,
             email: result.user.email,
-            name: result.user.displayName,
             photo: result.user.photoURL,
           }),
         }
       )
 
       const data = await res.json()
+      console.log(data)
       dispatch(signInSuccess(data.data.user))
       navigate('/home')
     } catch (error) {

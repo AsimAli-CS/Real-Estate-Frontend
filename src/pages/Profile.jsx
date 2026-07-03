@@ -1,13 +1,50 @@
 import { useSelector } from 'react-redux'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 export default function Profile() {
   const fileRef = useRef(null)
+  const [file, setFile] = useState(null)
   const { currentUser } = useSelector((state) => state.user)
+  const handleFileUpload = async (file) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append(
+      'upload_preset',
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    )
+
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${
+          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        }/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
+      const data = await res.json()
+      console.log('Cloudinary upload result:', data)
+    } catch (error) {
+      console.error('Error uploading image:', error)
+    }
+  }
+  useEffect(() => {
+    if (file) {
+      handleFileUpload(file)
+    }
+  }, [file])
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="p-10 text-3xl font-semibold text-center">Profile Page</h1>
       <form className="flex flex-col gap-4 max-w-lg mx-auto mt-5">
-        <input type="file" ref={fileRef} className="hidden" />
+        <input
+          type="file"
+          ref={fileRef}
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files[0])}
+          className="hidden"
+        />
         <div
           className="relative w-18 h-18 mx-auto group cursor-pointer"
           onClick={() => fileRef.current?.click()}
