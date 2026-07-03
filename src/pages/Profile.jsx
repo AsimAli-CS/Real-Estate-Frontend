@@ -1,15 +1,29 @@
 import { useSelector } from 'react-redux'
+import { useRef } from 'react'
 export default function Profile() {
+  const fileRef = useRef(null)
   const { currentUser } = useSelector((state) => state.user)
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="p-10 text-3xl font-semibold text-center">Profile Page</h1>
       <form className="flex flex-col gap-4 max-w-lg mx-auto mt-5">
-        <img
-          src={currentUser.photo}
-          alt="profile"
-          className="w-18 h-18 rounded-full mx-auto"
-        />
+        <input type="file" ref={fileRef} className="hidden" />
+        <div
+          className="relative w-18 h-18 mx-auto group cursor-pointer"
+          onClick={() => fileRef.current?.click()}
+        >
+          <img
+            src={currentUser.photo}
+            alt="profile"
+            className="w-full h-full rounded-full object-cover"
+          />
+
+          <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <span className="text-white text-xs font-medium text-center px-2">
+              Change Profile Image
+            </span>
+          </div>
+        </div>
         <input
           type="text"
           id="username"
