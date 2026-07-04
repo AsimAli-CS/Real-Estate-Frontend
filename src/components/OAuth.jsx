@@ -30,7 +30,7 @@ export default function OAuth() {
 
       const data = await res.json()
       console.log(data)
-      dispatch(signInSuccess(data.data.user))
+      dispatch(signInSuccess(data.data))
       navigate('/home')
     } catch (error) {
       console.error('Error during Google sign-in:', error)

@@ -1,7 +1,6 @@
-import { FaSearch } from 'react-icons/fa'
+import { FaSearch, FaUserCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { current } from '@reduxjs/toolkit'
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user)
   return (
@@ -35,11 +34,15 @@ export default function Header() {
 
           <Link to="/profile">
             {currentUser ? (
-              <img
-                src={currentUser.photo}
-                alt="profile"
-                className="w-8 h-8 rounded-full"
-              />
+              currentUser.photo ? (
+                <img
+                  src={currentUser.photo}
+                  alt="profile"
+                  className="w-8 h-8 rounded-full"
+                />
+              ) : (
+                <FaUserCircle className="w-8 h-8 text-gray-500" />
+              )
             ) : (
               <li className="hover:text-blue-400 cursor-pointer text-blue-400">
                 Sign In
