@@ -6,6 +6,7 @@ import {
   deleteUserSuccess,
   signOut,
 } from '../redux/user/userSlice'
+import { Link } from 'react-router-dom'
 export default function Profile() {
   const dispatch = useDispatch()
   const fileRef = useRef(null)
@@ -191,7 +192,15 @@ export default function Profile() {
         <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-300">
           {loading ? 'Updating...' : 'Update Profile'}
         </button>
+        <Link
+          to="/create-listing"
+          className="bg-green-500 text-white text-center py-2 px-4 rounded hover:bg-green-600 transition-colors duration-300"
+        >
+          {' '}
+          Create Listing{' '}
+        </Link>
       </form>
+
       {updatedUser && (
         <p className="text-green-500 mt-2">Profile updated successfully!</p>
       )}
