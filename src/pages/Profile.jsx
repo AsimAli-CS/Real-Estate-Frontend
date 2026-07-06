@@ -1,7 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useRef, useState, useEffect } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { updateUserSuccess, deleteUserSuccess } from '../redux/user/userSlice'
+import {
+  updateUserSuccess,
+  deleteUserSuccess,
+  signOut,
+} from '../redux/user/userSlice'
 export default function Profile() {
   const dispatch = useDispatch()
   const fileRef = useRef(null)
@@ -108,6 +112,18 @@ export default function Profile() {
     }
   }
 
+  const handleSignOut = async () => {
+    setLoading(true)
+    const res = await fetch('http://localhost:3000/api/v1/user/logout', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    dispatch(signOut())
+    navigate('/signin')
+  }
   useEffect(() => {
     if (file) {
       handleFileUpload(file)
@@ -189,7 +205,12 @@ export default function Profile() {
           {' '}
           Delete Account
         </span>
-        <span className="text-red-500 font-semibold text-sm"> Sign Out</span>
+        <span
+          onClick={handleSignOut}
+          className="text-red-500 font-semibold text-sm"
+        >
+          Sign Out
+        </span>
       </div>
     </div>
   )
