@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useRef, useState, useEffect } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { updateUserSuccess } from '../redux/user/userSlice'
+import { updateUserSuccess, deleteUserSuccess } from '../redux/user/userSlice'
 export default function Profile() {
   const dispatch = useDispatch()
   const fileRef = useRef(null)
@@ -12,7 +12,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-
+  const [updatedUser, setUpdatedUser] = useState(false)
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -47,6 +47,7 @@ export default function Profile() {
         return
       }
       dispatch(updateUserSuccess(data.data))
+      setUpdatedUser(true)
       setLoading(false)
       setError(null)
     } catch (error) {
@@ -81,6 +82,32 @@ export default function Profile() {
       console.error('Error uploading image:', error)
     }
   }
+
+  const handleDeleteAccount = async () => {
+    try {
+      setLoading(true)
+      const res = await fetch('http://localhost:3000/api/v1/user/deleteUser', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      const data = await res.json()
+      if (data.status === false) {
+        setError(data.message)
+        setLoading(false)
+        return
+      }
+      dispatch(deleteUserSuccess())
+      navigate('/signin')
+      setLoading(false)
+      setError(null)
+    } catch (error) {
+      setError(error.message)
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file)
@@ -149,10 +176,16 @@ export default function Profile() {
           {loading ? 'Updating...' : 'Update Profile'}
         </button>
       </form>
+      {updatedUser && (
+        <p className="text-green-500 mt-2">Profile updated successfully!</p>
+      )}
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <div className="flex justify-between gap-4 mt-4">
-        <span className="text-red-500 font-semibold text-sm">
+        <span
+          onClick={handleDeleteAccount}
+          className="text-red-500 font-semibold text-sm"
+        >
           {' '}
           Delete Account
         </span>
