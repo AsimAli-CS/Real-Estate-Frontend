@@ -6,7 +6,7 @@ export default function CreateListing() {
       <h1 className="p-10 text-3xl font-semibold text-center">
         Create Listing
       </h1>
-      <form className="flex flex-col gap-3 sm:flex-row">
+      <form className="flex flex-col gap-4 sm:flex-row ">
         <div className="flex flex-col gap-3 w-full sm:w-1/2 p-10">
           <input
             className="border border-gray-300 rounded-md p-2 flex-1 w-full"
@@ -86,6 +86,58 @@ export default function CreateListing() {
               />
               <span className="ml-2">Bathrooms</span>
             </div>
+            <div className="flex items-center gap-2">
+              <input
+                className="border border-gray-300 rounded-md p-2 mt-2"
+                type="number"
+                id="regularPrice"
+                name="regularPrice"
+                min="1"
+                max="10"
+              />
+              <div className="flex flex-col items-center gap-1">
+                <p>Regular Price</p>
+                <span className="text-xs">($ / month)</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                className="border border-gray-300 rounded-md p-2 mt-2"
+                type="number"
+                id="discountedPrice"
+                name="discountedPrice"
+                min="1"
+                max="10"
+              />
+              <div className="flex flex-col items-center gap-1">
+                <p>Discounted Price</p>
+                <span className="text-xs">($ / month)</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-1 ">
+            <p className="font-semibold">Images:</p>
+            <span> First Image will be used as the listing thumbnail.</span>
+            <div className="flex flex-col gap-2">
+              <input
+                className="border border-gray-300 rounded-md p-2 mt-2"
+                type="file"
+                id="images"
+                name="images"
+                accept=".jpg,.png,.jpeg"
+                multiple
+                required
+              />
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                Upload
+              </button>
+            </div>
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+              type="submit"
+            >
+              Create Listing
+            </button>
           </div>
         </div>
       </form>
