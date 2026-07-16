@@ -1,11 +1,54 @@
 import React from 'react'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 export default function CreateListing() {
   const [files, setFiles] = React.useState([])
   const [formData, setFormData] = React.useState({ imageUrls: [] })
+  const { token } = useSelector((state) => state.user)
   const [imagePreview, setImagePreview] = React.useState([])
   const [imageUploadError, setImageUploadError] = React.useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState('')
   console.log(formData)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const { sale, rent, discountedPrice, ...rest } = formData
+      const payload = {
+        ...rest,
+        type: sale ? 'sale' : 'rent',
+        discountPrice: discountedPrice,
+      }
+      const res = await fetch(
+        'http://localhost:3000/api/v1/listing/createlisting',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      )
+
+      const data = await res.json()
+
+      if (data.status == false) {
+        setError(data.message)
+        setLoading(false)
+        return
+      }
+
+      setSuccess('Listing Created Succesfully !!!')
+    } catch (error) {
+      setError(error.message)
+      setLoading(false)
+    }
+  }
+
   const storeImage = async (file) => {
     const uploadData = new FormData()
     uploadData.append('file', file)
@@ -55,7 +98,10 @@ export default function CreateListing() {
       <h1 className="p-10 text-3xl font-semibold text-center">
         Create Listing
       </h1>
-      <form className="flex flex-col gap-4 sm:flex-row ">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 sm:flex-row "
+      >
         <div className="flex flex-col gap-3 w-full sm:w-1/2 p-10">
           <input
             className="border border-gray-300 rounded-md p-2 flex-1 w-full"
@@ -262,11 +308,16 @@ export default function CreateListing() {
               </button>
             </div>
             <button
+              disabled={loading}
               className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
               type="submit"
             >
               Create Listing
             </button>
+            {success && (
+              <p className="text-green-600 mt-2 font-medium">{success}</p>
+            )}
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
         </div>
       </form>
