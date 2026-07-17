@@ -93,6 +93,15 @@ export default function CreateListing() {
     }
   }
 
+  const handleImageDelete = (index) => {
+    const updatedImageUrls = formData.imageUrls.filter((_, i) => i !== index)
+    setFormData((prev) => ({
+      ...prev,
+      imageUrls: updatedImageUrls,
+    }))
+    setImagePreview((prev) => prev.filter((_, i) => i !== index))
+  }
+
   return (
     <main className="p-3 max-w-7xl mx-auto">
       <h1 className="p-10 text-3xl font-semibold text-center">
@@ -319,6 +328,32 @@ export default function CreateListing() {
             )}
             {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
+        </div>
+        <div className="flex flex-col gap-2 w-full sm:w-1/2 p-10">
+          <p className="font-semibold">Image Preview:</p>
+          {imageUploadError && (
+            <p className="text-red-500">{imageUploadError}</p>
+          )}
+          {formData.imageUrls.length > 0 &&
+            formData.imageUrls.map((url, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center border p-3"
+              >
+                <img
+                  src={url}
+                  alt={`listing-${index}`}
+                  className="w-20 h-20 object-contain rounded-lg"
+                />
+
+                <button
+                  onClick={() => handleImageDelete(index)}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
         </div>
       </form>
     </main>
