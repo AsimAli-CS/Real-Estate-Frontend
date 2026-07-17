@@ -221,6 +221,15 @@ export default function Profile() {
           Sign Out
         </span>
       </div>
+
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={handleMyListings}
+          className="font-semibold text-green-600 hover:opacity-75 transition-colors duration-300"
+        >
+          My Listings
+        </button>
+      </div>
     </div>
   )
 }

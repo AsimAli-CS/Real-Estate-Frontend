@@ -330,7 +330,9 @@ export default function CreateListing() {
           </div>
         </div>
         <div className="flex flex-col gap-2 w-full sm:w-1/2 p-10">
-          <p className="font-semibold">Image Preview:</p>
+          <p className="font-semibold">
+            {imagePreview.length > 0 && 'Image Preview:'}
+          </p>
           {imageUploadError && (
             <p className="text-red-500">{imageUploadError}</p>
           )}
