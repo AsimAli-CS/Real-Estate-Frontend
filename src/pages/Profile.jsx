@@ -18,6 +18,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [updatedUser, setUpdatedUser] = useState(false)
+  const [myListings, setMyListings] = useState([])
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -131,6 +132,31 @@ export default function Profile() {
     }
   }, [file])
 
+  const handleMyListings = async () => {
+    try {
+      setLoading(true)
+      const res = await fetch(
+        'http://localhost:3000/api/v1/listing/getlistings',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      const data = await res.json()
+      if (data.status === false) {
+        setError(data.message)
+        setLoading(false)
+        return
+      }
+      setMyListings(data.data)
+      setLoading(false)
+    } catch (error) {
+      setError(error.message)
+      setLoading(false)
+    }
+  }
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="p-10 text-3xl font-semibold text-center">Profile Page</h1>
@@ -147,7 +173,7 @@ export default function Profile() {
           className="hidden"
         />
         <div
-          className="relative w-18 h-18 mx-auto group cursor-pointer"
+          className="relative w-24 h-24 mx-auto group cursor-pointer"
           onClick={() => fileRef.current?.click()}
         >
           {imagePreview ? (
@@ -189,7 +215,10 @@ export default function Profile() {
           onChange={handleChange}
           className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-300">
+        <button
+          disabled={loading}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:opacity-50"
+        >
           {loading ? 'Updating...' : 'Update Profile'}
         </button>
         <Link
@@ -229,6 +258,30 @@ export default function Profile() {
         >
           My Listings
         </button>
+      </div>
+
+      <div className="mt-6 space-y-4">
+        {myListings.map((listing) => (
+          <div
+            key={listing._id}
+            className="border rounded-lg p-4 shadow flex justify-between items-center gap-4"
+          >
+            <img
+              src={listing.imageUrls?.[0]}
+              alt={listing.title}
+              className="w-20 h-20 object-cover rounded"
+            />
+
+            <div className="flex flex-col gap-2">
+              <button className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                Edit
+              </button>
+              <button className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
