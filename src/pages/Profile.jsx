@@ -114,6 +114,31 @@ export default function Profile() {
     }
   }
 
+  const handleDeletelisting = async (id) => {
+    try {
+      setLoading(true)
+      const res = await fetch(
+        `http://localhost:3000/api/v1/listing/deletelistingbyid/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      const data = await res.json()
+      if (data.status === false) {
+        setError(data.message)
+        return
+      }
+
+      setMyListings((prev) => prev.filter((listing) => listing._id !== id))
+    } catch (error) {
+      setError(error.message)
+      setLoading(false)
+    }
+  }
+
   const handleSignOut = async () => {
     setLoading(true)
     const res = await fetch('http://localhost:3000/api/v1/user/logout', {
@@ -273,10 +298,15 @@ export default function Profile() {
             />
 
             <div className="flex flex-col gap-2">
-              <button className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
-                Edit
-              </button>
-              <button className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+              <Link to={`/update-listing/${listing._id}`}>
+                <button className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                  Edit
+                </button>
+              </Link>
+              <button
+                onClick={() => handleDeletelisting(listing._id)}
+                className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+              >
                 Delete
               </button>
             </div>
